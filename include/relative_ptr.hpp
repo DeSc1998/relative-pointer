@@ -42,15 +42,11 @@ public:
   relative_ptr& operator=( const relative_ptr& ) = default;
   relative_ptr& operator=( relative_ptr&& )      = default;
 
-  // explicit casting needed otherwise implicit cast to Node* would favored over
-  // cast to bool for some reason
   operator const value_type*( ) const {
     return reinterpret_cast< const value_type* >(
       reinterpret_cast< const char* >( &ptr ) + decode( ptr ) );
   }
 
-  // explicit casting needed otherwise implicit cast to Node* would favored over
-  // cast to bool for some reason
   operator value_type*( ) {
     return reinterpret_cast< value_type* >( reinterpret_cast< char* >( &ptr )
                                             + decode( ptr ) );

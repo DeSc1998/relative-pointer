@@ -15,10 +15,8 @@ void print_tree( Node* root, size_t indent_level = 0 ) {
   }
   printf( "%i\n", root->value );
   if ( root->left )
-    // explicit casting needed (see 'include/relative_ptr.hpp' for reason)
     print_tree( root->left, indent_level + 1 );
   if ( root->right )
-    // explicit casting needed
     print_tree( root->right, indent_level + 1 );
 }
 

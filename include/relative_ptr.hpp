@@ -33,6 +33,7 @@ public:
   }
 
   operator bool( ) const { return decode( ptr ) != 0; }
+  operator bool( ) { return decode( ptr ) != 0; }
 
   relative_ptr( )                     = default;
   relative_ptr( const relative_ptr& ) = default;
@@ -43,21 +44,26 @@ public:
 
   // explicit casting needed otherwise implicit cast to Node* would favored over
   // cast to bool for some reason
-  explicit operator const value_type*( ) const {
+  operator const value_type*( ) const {
     return reinterpret_cast< const value_type* >(
       reinterpret_cast< const char* >( &ptr ) + decode( ptr ) );
   }
 
   // explicit casting needed otherwise implicit cast to Node* would favored over
   // cast to bool for some reason
-  explicit operator value_type*( ) {
+  operator value_type*( ) {
     return reinterpret_cast< value_type* >( reinterpret_cast< char* >( &ptr )
                                             + decode( ptr ) );
   }
 
-  value_type* operator->( ) const {
+  const value_type* operator->( ) const {
     return reinterpret_cast< const value_type* >(
       reinterpret_cast< const char* >( &ptr ) + decode( ptr ) );
+  }
+
+  value_type* operator->( ) {
+    return reinterpret_cast< value_type* >( reinterpret_cast< char* >( &ptr )
+                                            + decode( ptr ) );
   }
 
   value_type& operator*( ) {

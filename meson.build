@@ -9,10 +9,12 @@ project(
 )
 
 src = [ 'src/main.cpp' ]
+include_dir = 'include/'
 
 exe = executable(
     'relptr',
     sources : src,
+    include_directories : include_dir,
     cpp_args : [ '-g' ],
     override_options : [
         'build_type=release'
@@ -22,5 +24,6 @@ exe = executable(
 exe_d = executable(
     'relptr_d',
     sources : src,
+    include_directories : include_dir,
     cpp_args : [ '-g' ]
 )

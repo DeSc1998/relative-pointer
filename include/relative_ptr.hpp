@@ -25,6 +25,10 @@ public:
     this->ptr       = encode( static_cast< size_type >( abs - rel ) );
   }
 
+  relative_ptr( )                     = default;
+  relative_ptr( const relative_ptr& ) = default;
+  relative_ptr( relative_ptr&& )      = default;
+
   relative_ptr& operator=( const value_type* ptr ) {
     const char* rel = reinterpret_cast< char* >( &this->ptr );
     const char* abs = reinterpret_cast< const char* >( ptr );
@@ -32,15 +36,11 @@ public:
     return *this;
   }
 
-  operator bool( ) const { return decode( ptr ) != 0; }
-  operator bool( ) { return decode( ptr ) != 0; }
-
-  relative_ptr( )                     = default;
-  relative_ptr( const relative_ptr& ) = default;
-  relative_ptr( relative_ptr&& )      = default;
-
   relative_ptr& operator=( const relative_ptr& ) = default;
   relative_ptr& operator=( relative_ptr&& )      = default;
+
+  operator bool( ) const { return decode( ptr ) != 0; }
+  operator bool( ) { return decode( ptr ) != 0; }
 
   operator const value_type*( ) const {
     return reinterpret_cast< const value_type* >(

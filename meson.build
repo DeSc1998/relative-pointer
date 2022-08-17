@@ -27,3 +27,33 @@ exe_d = executable(
     include_directories : include_dir,
     cpp_args : [ '-g' ]
 )
+
+test(
+    'small tree',
+    executable(
+        'small_tree',
+        sources : 'tests/small_tree.cpp',
+        include_directories : include_dir
+    )
+)
+
+test(
+    'save tree',
+    executable(
+        'save_tree',
+        sources : 'tests/save_tree.cpp',
+        include_directories : include_dir
+    ),
+    is_parallel : false,
+    priority : 10
+)
+
+test(
+    'load tree',
+    executable(
+        'load_tree',
+        sources : 'tests/load_tree.cpp',
+        include_directories : include_dir
+    ),
+    is_parallel : false
+)

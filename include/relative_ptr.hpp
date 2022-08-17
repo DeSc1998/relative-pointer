@@ -1,13 +1,17 @@
 #pragma once
 
 #include <concepts>
+#include <istream>
 #include <limits>
+#include <ostream>
 
 template < typename Type, std::signed_integral Size = long >
 class relative_ptr {
+public:
   using size_type  = Size;
   using value_type = Type;
 
+private:
   static constexpr size_type default_null
     = std::numeric_limits< size_type >::min( );
 
@@ -31,13 +35,15 @@ public:
     : ptr( rel ) { }
 
   relative_ptr( const value_type* ptr )
-    : ptr( encode( ptr_diff( ptr, this->ptr ) ) ) { }
+    : ptr( ptr != nullptr ? encode( ptr_diff( ptr, this->ptr ) )
+                          : default_null ) { }
 
   relative_ptr& operator=( const relative_ptr& ) = default;
   relative_ptr& operator=( relative_ptr&& )      = default;
 
   relative_ptr& operator=( const value_type* ptr ) {
-    this->ptr = encode( ptr_diff( ptr, this->ptr ) );
+    this->ptr
+      = ptr != nullptr ? encode( ptr_diff( ptr, this->ptr ) ) : default_null;
     return *this;
   }
 
@@ -62,4 +68,23 @@ public:
   const value_type& operator*( ) const {
     return *static_cast< const value_type* >( *this );
   }
+
+  template < typename T, typename S >
+  friend std::ostream& operator<<( std::ostream&, const relative_ptr< T, S >& );
+
+  template < typename T, typename S >
+  friend std::istream& operator>>( std::istream&, relative_ptr< T, S >& );
 };
+
+template < typename T, typename S >
+std::ostream& operator<<( std::ostream& out, const relative_ptr< T, S >& ptr ) {
+  return out << ptr.ptr;
+}
+
+template < typename T, typename S >
+std::istream& operator>>( std::istream& in, relative_ptr< T, S >& ptr ) {
+  typename relative_ptr< T, S >::size_type tmp { };
+  in >> tmp;
+  ptr = relative_ptr< T, S >( tmp );
+  return in;
+}
